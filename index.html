@@ -56,6 +56,9 @@
 
     <label>Risoluzione consigliata</label>
     <input id="resolution" readonly />
+
+    <label>Preset consigliato</label>
+    <input id="preset" readonly />
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -100,6 +103,7 @@
       document.getElementById("sampler").value = p[10]; // Sampler consigliato
       document.getElementById("scheduler").value = p[11]; // Scheduler consigliato
       document.getElementById("resolution").value = p[12]; // Risoluzione consigliata
+      document.getElementById("preset").value = p[13]; // Preset consigliato
 
       // Highlight active button
       document.querySelectorAll(".prompt-button").forEach((btn, i) => {
