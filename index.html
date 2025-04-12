@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prompt Generator Redbubble</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .prompt-button { margin: 5px; padding: 10px 15px; border: 1px solid #ccc; cursor: pointer; border-radius: 5px; }
+    .prompt-button.active { background-color: #4caf50; color: white; }
+    .section { margin-top: 20px; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    textarea, input { width: 100%; padding: 8px; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Prompt Generator per Redbubble</h1>
+
+  <!-- Upload CSV -->
+  <input type="file" id="csvFile" accept=".csv" />
+  <div id="buttons"></div>
+
+  <div class="section">
+    <label>Nome su Redbubble</label>
+    <input id="rb-name" readonly />
+
+    <label>Prompt Positivo</label>
+    <textarea id="positive" rows="3" readonly></textarea>
+
+    <label>Prompt Negativo</label>
+    <textarea id="negative" rows="2" readonly></textarea>
+
+    <label>Stili da attivare</label>
+    <input id="styles" readonly />
+
+    <label>Altre impostazioni Fooocus</label>
+    <input id="extras" readonly />
+
+    <label>Tag suggeriti</label>
+    <input id="tags" readonly />
+
+    <label>Categoria suggerita</label>
+    <input id="category" readonly />
+
+    <label>Colori predominanti</label>
+    <input id="colors" readonly />
+
+    <label>Tipo di prodotto consigliato</label>
+    <input id="product-type" readonly />
+
+    <label>Sampler consigliato</label>
+    <input id="sampler" readonly />
+
+    <label>Scheduler consigliato</label>
+    <input id="scheduler" readonly />
+
+    <label>Risoluzione consigliata</label>
+    <input id="resolution" readonly />
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script>
+    let prompts = [];
+
+    document.getElementById("csvFile").addEventListener("change", function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        Papa.parse(file, {
+          complete: function(results) {
+            prompts = results.data.slice(1); // Elimina la prima riga (intestazioni)
+            renderButtons();
+          }
+        });
+      }
+    });
+
+    function renderButtons() {
+      const buttonsContainer = document.getElementById("buttons");
+      buttonsContainer.innerHTML = ''; // Pulisce i pulsanti
+      prompts.forEach((p, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = p[0]; // Nome prodotto
+        btn.className = "prompt-button";
+        btn.onclick = () => renderPrompt(i);
+        buttonsContainer.appendChild(btn);
+      });
+    }
+
+    function renderPrompt(index) {
+      const p = prompts[index];
+      document.getElementById("rb-name").value = p[1]; // Nome su Redbubble
+      document.getElementById("positive").value = p[2]; // Prompt Positivo
+      document.getElementById("negative").value = p[3]; // Prompt Negativo
+      document.getElementById("styles").value = p[4]; // Stili da attivare
+      document.getElementById("extras").value = p[5]; // Altre impostazioni Fooocus
+      document.getElementById("tags").value = p[6]; // Tag suggeriti
+      document.getElementById("category").value = p[7]; // Categoria suggerita
+      document.getElementById("colors").value = p[8]; // Colori predominanti
+      document.getElementById("product-type").value = p[9]; // Tipo di prodotto consigliato
+      document.getElementById("sampler").value = p[10]; // Sampler consigliato
+      document.getElementById("scheduler").value = p[11]; // Scheduler consigliato
+      document.getElementById("resolution").value = p[12]; // Risoluzione consigliata
+
+      // Highlight active button
+      document.querySelectorAll(".prompt-button").forEach((btn, i) => {
+        btn.classList.toggle("active", i === index);
+      });
+    }
+  </script>
+</body>
+</html>
